@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certs:/etc/letsencrypt
+      - ./certs-data:/data/letsencrypt
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - synapse
+    networks:
+      - webproxy
+
+  riotweb:
+    image: bubuntux/riot-web:latest
+    hostname: riotweb
+    restart: unless-stopped
+    volumes:
+      - ./config.json:/etc/riot-web/config.json:ro
+    networks:
+      - webproxy
+
+  synapse:
+    image: docker.io/matrixdotorg/synapse:latest
+    hostname: synapse
+    restart: unless-stopped
+    environment:
+      - SYNAPSE_SERVER_NAME=${FQDN}
+      - SYNAPSE_REPORT_STATS=no
+      - SYNAPSE_ENABLE_REGISTRATION=yes
+      - SYNAPSE_LOG_LEVEL=INFO
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=matrix
+      - POSTGRES_PASSWORD=${POSTRES_PASSWORD}
+      - SYNAPSE_NO_TLS=1
+      - SYNAPSE_MAX_UPLOAD_SIZE=100M
+    volumes:
+      - ./files:/data
+    depends_on:
+      - db
+    networks:
+      - webproxy
+
+  db:
+    image: docker.io/postgres:10-alpine
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=matrix
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./schemas:/var/lib/postgresql/data
+    networks:
+      - webproxy
+
+networks:
+  webproxy:
