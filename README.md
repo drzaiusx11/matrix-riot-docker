@@ -4,7 +4,7 @@ an all-in-one docker compose setup for a personal riot client and matrix server
 usage
 =====
 
-first you'll want to start the init docker compose script:
+If you need to generate certs via letsencrypt first you'll want to start the init docker compose script:
 ```
 docker-compose -f docker-compose.init.yml up
 ```
