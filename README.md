@@ -15,6 +15,6 @@ then run renew certs with your fully qualified domain name
 this will hit your nginx proxy with the correct endpoints to authenticate with lets-encrypt, filling out your certs and certs-data folders if successfull
 then you just run
 ```
-docker-compose -f docker-compose.yml up
+docker-compose up
 ```
 to startup everything
