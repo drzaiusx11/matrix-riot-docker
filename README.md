@@ -3,6 +3,7 @@ an all-in-one docker compose setup for a personal riot client and matrix server
 
 usage
 =====
+Fill out the .env file with your fully qualified domain name and postgres password
 
 If you need to generate certs via letsencrypt first you'll want to start the init docker compose script:
 ```
