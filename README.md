@@ -13,7 +13,7 @@ docker-compose -f docker-compose.init.yml up
 ```
 then run renew certs with your fully qualified domain name
 ```
-./renew-cert.sh chat.example.com
+./renew-cert.sh example.com
 ```
 this will hit your nginx proxy with the correct endpoints to authenticate with lets-encrypt, filling out your certs and certs-data folders if successfull.
 
